@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  firestore:
+    image: mtlynch/firestore-emulator:20210410
+    environment:
+      - FIRESTORE_PROJECT_ID=test-project-id
+      - PORT=3001
+    ports:
+      - 3001:3001
+  app:
+    container_name: app
+    build: .
+    environment:
+      - FIRESTORE_EMULATOR_HOST=firestore
+      - FIRESTORE_PROJECT_ID=test-project-id
+      - FIRESTORE_EMULATOR_PORT=3001
+    volumes:
+      - .:/app
+    tty: true
+    depends_on:
+      - firestore
